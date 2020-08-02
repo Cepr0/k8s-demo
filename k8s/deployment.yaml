@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: k8s-demo
+  name: k8s-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: k8s-demo
+    spec:
+      containers:
+      - image: cepr0/k8s-demo
+        name: k8s-demo
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: k8s-demo
+  name: k8s-demo
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: k8s-demo
+  type: ClusterIP
+status:
+  loadBalancer: {}
