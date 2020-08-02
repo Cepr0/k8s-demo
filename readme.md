@@ -5,7 +5,7 @@
 
 1. Install KinD
 
-```
+```shell script
 # Download the latest version of KinD
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
 # Make the binary executable
