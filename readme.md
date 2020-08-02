@@ -1,7 +1,10 @@
 ### KinD: Kubernetes cluster in Docker
 
 > https://kubernetes.io/blog/2020/05/21/wsl-docker-kubernetes-on-the-windows-desktop/ <br>
-> https://spring.io/guides/gs/spring-boot-kubernetes/
+> https://spring.io/guides/gs/spring-boot-kubernetes/ <br>
+> https://spring.io/guides/gs/spring-boot-docker/ <br>
+> https://spring.io/guides/topicals/spring-boot-docker/ <br>
+> https://spring.io/blog/2020/06/18/what-s-new-in-spring-boot-2-3
 
 1. Install KinD
 
@@ -27,17 +30,30 @@ mvn package -Dmaven.test.skip=true
 ```
 
 4. Build and push your docker image
+    
+    - Build the image with Dockerfile
 
-```shell script
-docker build -t <you docker-hub profile>/k8s-demo .
-docker push <you docker-hub profile>/k8s-demo
-```
+    ```shell script
+    docker build -t <you docker-hub profile>/k8s-demo:dockerfile .    
+    ```
+
+    - Or build the image [directly using buildpack](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-container-images-buildpacks)
+    
+    ```shell script
+    mvn spring-boot:build-image -Dspring-boot.build-image.imageName=<you docker-hub profile>/k8s-demo:buildpack
+    ```
+
+    - Push the image
+    
+    ```shell script
+    docker push <you docker-hub profile>/k8s-demo:<dockerfile or buildpack>
+    ```
 
 5. Deploy your app to k8s cluster
 
     - Create deployment.yml
     ```shell script
-    kubectl create deployment k8s-demo --image=<you docker-hub profile>/k8s-demo --dry-run -o=yaml > k8s/deployment.yaml &&
+    kubectl create deployment k8s-demo --image=<you docker-hub profile>/k8s-demo:<dockerfile or buildpack> --dry-run -o=yaml > k8s/deployment.yaml &&
     echo --- >> k8s/deployment.yaml &&
     kubectl create service clusterip k8s-demo --tcp=8080:8080 --dry-run -o=yaml >> k8s/deployment.yaml    
     ```
